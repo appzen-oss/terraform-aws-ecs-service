@@ -242,6 +242,12 @@ resource "aws_ecs_service" "service-no-lb" {
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
+  capacity_provider_strategy {
+    base = "${var.base}"
+    capacity_provider = "${var.capacity_provider}"
+    weight = "${var.weight}"
+  }
+
   ordered_placement_strategy {
     type  = "${var.ecs_placement_strategy_type}"
     field = "${var.ecs_placement_strategy_field}"
@@ -272,6 +278,12 @@ resource "aws_ecs_service" "service-no-lb-net" {
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  capacity_provider_strategy {
+    base = "${var.base}"
+    capacity_provider = "${var.capacity_provider}"
+    weight = "${var.weight}"
+  }
 
   network_configuration {
     assign_public_ip = "${var.assign_public_ip}"
@@ -318,6 +330,12 @@ resource "aws_ecs_service" "service" {
     field = "${var.ecs_placement_strategy_field}"
   }
 
+  capacity_provider_strategy {
+    base = "${var.base}"
+    capacity_provider = "${var.capacity_provider}"
+    weight = "${var.weight}"
+  }
+
   load_balancer = {
     target_group_arn = "${element(module.lb.target_group_arns, 0)}"
     container_name   = "${module.label.name}"
@@ -354,6 +372,12 @@ resource "aws_ecs_service" "service-lb-net" {
   tags                  = "${module.label.tags}"
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
+  capacity_provider_strategy {
+    base = "${var.base}"
+    capacity_provider = "${var.capacity_provider}"
+    weight = "${var.weight}"
+  }
+  
   network_configuration {
     assign_public_ip = "${var.assign_public_ip}"
     security_groups  = ["${var.awsvpc_security_group_ids}"]

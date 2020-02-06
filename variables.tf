@@ -1,6 +1,18 @@
 //
 // Variables specific to DNS Aliases module
 //
+variable "base" {
+  description = "The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined"
+  type        = "string"
+  default     = "0"
+}
+
+variable "capacity_provider" {
+  description = "The short name or full Amazon Resource Name (ARN) of the capacity provider"
+  type        = "string"
+  default     = "0"
+}
+
 variable "dns_aliases" {
   description = "Additional DNS names"
   type        = "list"
@@ -275,4 +287,10 @@ variable "container_definition" {
 variable "container_definition_additional" {
   description = "Additional parameters to add to container definition. This is a json substring"
   default     = ""
+}
+
+variable "weight" {
+  description = "The relative percentage of the total number of launched tasks that should use the specified capacity provider"
+  type        = "string"
+  default     = "1"
 }
