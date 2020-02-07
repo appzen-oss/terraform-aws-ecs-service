@@ -235,7 +235,7 @@ resource "aws_ecs_service" "service-no-lb" {
   deployment_minimum_healthy_percent = "${var.ecs_deployment_minimum_healthy_percent}"
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
-  launch_type                        = "${var.ecs_launch_type}"
+  #launch_type                        = "${var.ecs_launch_type}"
   placement_constraints              = "${var.ecs_placement_constraints}"
   platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
   propagate_tags                     = "${var.propagate_tags_method}"
@@ -377,7 +377,7 @@ resource "aws_ecs_service" "service-lb-net" {
     capacity_provider = "${var.capacity_provider}"
     weight = "${var.weight}"
   }
-  
+
   network_configuration {
     assign_public_ip = "${var.assign_public_ip}"
     security_groups  = ["${var.awsvpc_security_group_ids}"]
