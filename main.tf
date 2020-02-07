@@ -224,7 +224,7 @@ locals {
   ecs_service_lb_net       = "${local.ecs_service_lb && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_lb_no_net    = "${local.ecs_service_lb && var.network_mode != "awsvpc" ? 1 : 0}"
   service_name             = "${module.service_full_name.value ? module.label.id : module.label.name}"
-  ecs_service_cap_provider = "${var.ecs_service_cap_provider != "" ? 1 : 0}"
+  #ecs_service_cap_provider = "${var.ecs_service_cap_provider != "" ? 1 : 0}"
 }
 
 # TODO: add service registry support
