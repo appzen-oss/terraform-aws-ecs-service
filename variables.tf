@@ -180,7 +180,7 @@ variable "propagate_tags_method" {
 variable "requires_compatibilities" {
   description = "A set of launch types required by the task. The valid values are EC2 and FARGATE"
   type        = "list"
-  default     = ["EC2"]
+  default     = [""]
 }
 
 variable "security_group_ids" {
