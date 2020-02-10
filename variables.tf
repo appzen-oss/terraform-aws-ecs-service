@@ -9,7 +9,13 @@ variable "base" {
 
 variable "capacity_provider" {
   description = "The short name or full Amazon Resource Name (ARN) of the capacity provider"
-  default     = true
+  type        = "string"
+  default     = ""
+}
+
+variable "enable_capacity_provider" {
+  description = "The short name or full Amazon Resource Name (ARN) of the capacity provider"
+  default     = false
 }
 
 variable "dns_aliases" {

@@ -218,13 +218,13 @@ resource "aws_ecs_task_definition" "task" {
 
 locals {
   ecs_service_no_lb                     = "${module.enabled.value && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
-  ecs_service_no_lb_cap_provider        = "${module.enabled.value && var.capacity_provider && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
+  ecs_service_no_lb_cap_provider        = "${module.enabled.value && var.enable_capacity_provider && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
   ecs_service_no_lb_net                 = "${local.ecs_service_no_lb && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_no_lb_net_cap_provider    = "${local.ecs_service_no_lb_cap_provider && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_no_lb_no_net              = "${local.ecs_service_no_lb && var.network_mode != "awsvpc" ? 1 : 0}"
   ecs_service_no_lb_no_net_cap_provider = "${local.ecs_service_no_lb_cap_provider && var.network_mode != "awsvpc" ? 1 : 0}"
   ecs_service_lb                        = "${(module.enabled.value && module.enable_lb.value) || local.lb_existing ? 1 : 0}"
-  ecs_service_lb_cap_provider           = "${(module.enabled.value && module.enable_lb.value && var.capacity_provider) || (local.lb_existing && var.capacity_provider) ? 1 : 0}"
+  ecs_service_lb_cap_provider           = "${(module.enabled.value && module.enable_lb.value && var.enable_capacity_provider) || (local.lb_existing && var.enable_capacity_provider) ? 1 : 0}"
   ecs_service_lb_net                    = "${local.ecs_service_lb && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_lb_net_cap_provider       = "${local.ecs_service_lb_cap_provider && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_lb_no_net                 = "${local.ecs_service_lb && var.network_mode != "awsvpc" ? 1 : 0}"
