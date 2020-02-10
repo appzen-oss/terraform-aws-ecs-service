@@ -420,7 +420,7 @@ resource "aws_ecs_service" "service" {
   ]
 }
 
-resource "aws_ecs_service" "service-cap-provider" {
+resource "aws_ecs_service" "service-cap-provider-no-net" {
   count                              = "${local.ecs_service_lb_no_net_cap_provder}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
