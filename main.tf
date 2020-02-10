@@ -273,7 +273,7 @@ resource "aws_ecs_service" "service-no-lb-cap-provider" {
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  #platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -347,7 +347,7 @@ resource "aws_ecs_service" "service-no-lb-net-cap-provider" {
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  #platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -431,7 +431,7 @@ resource "aws_ecs_service" "service-cap-provider-no-net" {
   health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
   iam_role                           = "${aws_iam_role.service.arn}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  #platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -476,7 +476,7 @@ resource "aws_ecs_service" "service-cap-provider" {
   health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
   iam_role                           = "${aws_iam_role.service.arn}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  #platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -527,12 +527,6 @@ resource "aws_ecs_service" "service-lb-net" {
   propagate_tags        = "${var.propagate_tags_method}"
   tags                  = "${module.label.tags}"
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
-
-  capacity_provider_strategy {
-    base = "${var.base}"
-    capacity_provider = "${var.capacity_provider}"
-    weight = "${var.weight}"
-  }
 
   network_configuration {
     assign_public_ip = "${var.assign_public_ip}"
