@@ -217,19 +217,19 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 locals {
-  ecs_service_no_lb        = "${module.enabled.value && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
-  ecs_service_no_lb_net    = "${local.ecs_service_no_lb && var.network_mode == "awsvpc" ? 1 : 0}"
-  ecs_service_no_lb_no_net = "${local.ecs_service_no_lb && var.network_mode != "awsvpc" ? 1 : 0}"
-  ecs_service_lb           = "${(module.enabled.value && module.enable_lb.value) || local.lb_existing ? 1 : 0}"
-  ecs_service_lb_net       = "${local.ecs_service_lb && var.network_mode == "awsvpc" ? 1 : 0}"
-  ecs_service_lb_no_net    = "${local.ecs_service_lb && var.network_mode != "awsvpc" ? 1 : 0}"
+  ecs_service_no_lb             = "${module.enabled.value && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
+  ecs_service_no_lb_net         = "${local.ecs_service_no_lb && var.network_mode == "awsvpc" ? 1 : 0}"
+  ecs_service_no_lb_no_net      = "${local.ecs_service_no_lb && var.network_mode != "awsvpc" ? 1 : 0}"
+  ecs_service_lb                = "${(module.enabled.value && module.enable_lb.value) || local.lb_existing ? 1 : 0}"
+  ecs_service_lb_net            = "${local.ecs_service_lb && var.network_mode == "awsvpc" ? 1 : 0}"
+  ecs_service_lb_no_net         = "${local.ecs_service_lb && var.network_mode != "awsvpc" ? 1 : 0}"
   ecs_service_no_lb_spot        = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb ? 1 : 0}"
   ecs_service_no_lb_net_spot    = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb_net ? 1 : 0}"
   ecs_service_no_lb_no_net_spot = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb_no_net ? 1 : 0}"
   ecs_service_lb_spot           = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb ? 1 : 0}"
   ecs_service_lb_net_spot       = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb_net ? 1 : 0}"
   ecs_service_lb_no_net_spot    = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb_no_net ? 1 : 0}"
-  service_name             = "${module.service_full_name.value ? module.label.id : module.label.name}"
+  service_name                  = "${module.service_full_name.value ? module.label.id : module.label.name}"
 }
 
 # TODO: add service registry support
@@ -280,14 +280,14 @@ resource "aws_ecs_service" "service-no-lb-spot" {
 
   capacity_provider_strategy {
     capacity_provider {
-      name    = "${capacity_provider_1_type}"
-      weight  = "${capacity_provider_1_weight}"
-      base    = "${capacity_provider_1_base}"
+      name    = "${var.capacity_provider_1_type}"
+      weight  = "${var.capacity_provider_1_weight}"
+      base    = "${var.capacity_provider_1_base}"
     }
     capacity_provider {
-      name    = "${capacity_provider_2_type}"
-      weight  = "${capacity_provider_2_weight}"
-      base    = "${capacity_provider_2_base}"
+      name    = "${var.capacity_provider_2_type}"
+      weight  = "${var.capacity_provider_2_weight}"
+      base    = "${var.capacity_provider_2_base}"
     }
   }
 
@@ -367,14 +367,14 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
 
   capacity_provider_strategy {
     capacity_provider {
-      name    = "${capacity_provider_1_type}"
-      weight  = "${capacity_provider_1_weight}"
-      base    = "${capacity_provider_1_base}"
+      name    = "${var.capacity_provider_1_type}"
+      weight  = "${var.capacity_provider_1_weight}"
+      base    = "${var.capacity_provider_1_base}"
     }
     capacity_provider {
-      name    = "${capacity_provider_2_type}"
-      weight  = "${capacity_provider_2_weight}"
-      base    = "${capacity_provider_2_base}"
+      name    = "${var.capacity_provider_2_type}"
+      weight  = "${var.capacity_provider_2_weight}"
+      base    = "${var.capacity_provider_2_base}"
     }
   }
 
@@ -453,14 +453,14 @@ resource "aws_ecs_service" "service-spot" {
 
   capacity_provider_strategy {
     capacity_provider {
-      name    = "${capacity_provider_1_type}"
-      weight  = "${capacity_provider_1_weight}"
-      base    = "${capacity_provider_1_base}"
+      name    = "${var.capacity_provider_1_type}"
+      weight  = "${var.capacity_provider_1_weight}"
+      base    = "${var.capacity_provider_1_base}"
     }
     capacity_provider {
-      name    = "${capacity_provider_2_type}"
-      weight  = "${capacity_provider_2_weight}"
-      base    = "${capacity_provider_2_base}"
+      name    = "${var.capacity_provider_2_type}"
+      weight  = "${var.capacity_provider_2_weight}"
+      base    = "${var.capacity_provider_2_base}"
     }
   }
 
@@ -554,14 +554,14 @@ resource "aws_ecs_service" "service-lb-net-spot" {
 
   capacity_provider_strategy {
     capacity_provider {
-      name    = "${capacity_provider_1_type}"
-      weight  = "${capacity_provider_1_weight}"
-      base    = "${capacity_provider_1_base}"
+      name    = "${var.capacity_provider_1_type}"
+      weight  = "${var.capacity_provider_1_weight}"
+      base    = "${var.capacity_provider_1_base}"
     }
     capacity_provider {
-      name    = "${capacity_provider_2_type}"
-      weight  = "${capacity_provider_2_weight}"
-      base    = "${capacity_provider_2_base}"
+      name    = "${var.capacity_provider_2_type}"
+      weight  = "${var.capacity_provider_2_weight}"
+      base    = "${var.capacity_provider_2_base}"
     }
   }
 
