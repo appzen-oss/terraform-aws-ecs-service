@@ -228,7 +228,7 @@ locals {
 
 # TODO: add service registry support
 resource "aws_ecs_service" "service-no-lb" {
-  count                              = "${local.ecs_service_no_lb_no_net > 0 && var.ecs_launch_type != "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type != "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -259,7 +259,7 @@ resource "aws_ecs_service" "service-no-lb" {
 }
 
 resource "aws_ecs_service" "service-no-lb-spot" {
-  count                              = "${local.ecs_service_no_lb_no_net > 0 && var.ecs_launch_type == "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type == "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -309,7 +309,7 @@ capacity_provider_strategy {
 }
 
 resource "aws_ecs_service" "service-no-lb-net" {
-  count                              = "${local.ecs_service_no_lb_net > 0 && var.ecs_launch_type != "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type != "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -347,7 +347,7 @@ resource "aws_ecs_service" "service-no-lb-net" {
 }
 
 resource "aws_ecs_service" "service-no-lb-net-spot" {
-  count                              = "${local.ecs_service_no_lb_net > 0 && var.ecs_launch_type == "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type == "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -397,7 +397,7 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
 }
 
 resource "aws_ecs_service" "service" {
-  count                              = "${local.ecs_service_lb_no_net > 0 && var.ecs_launch_type != "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type != "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -437,7 +437,7 @@ resource "aws_ecs_service" "service" {
 }
 
 resource "aws_ecs_service" "service-spot" {
-  count                              = "${local.ecs_service_lb_no_net > 0 && var.ecs_launch_type == "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type == "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -489,7 +489,7 @@ resource "aws_ecs_service" "service-spot" {
 }
 
 resource "aws_ecs_service" "service-lb-net" {
-  count                              = "${local.ecs_service_lb_net > 0 && var.ecs_launch_type != "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type != "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -537,7 +537,7 @@ resource "aws_ecs_service" "service-lb-net" {
 }
 
 resource "aws_ecs_service" "service-lb-net-spot" {
-  count                              = "${local.ecs_service_lb_net > 0 && var.ecs_launch_type == "FARGATE_SPOT"}"
+  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type == "FARGATE_SPOT"}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
