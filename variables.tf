@@ -87,7 +87,37 @@ variable "ecs_desired_count" {
 
 variable "ecs_launch_type" {
   description = "The launch type on which to run your service. The valid values are EC2 and FARGATE"
-  default     = "EC2"
+  default     = "FARGATE"
+}
+
+variable "capacity_provider_1_type" {
+  description = "ECS service capacity provider 1"
+  default     = "FARGATE_SPOT"
+}
+
+variable "capacity_provider_1_base" {
+  description = "The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined"
+  default     = "100"
+}
+
+variable "capacity_provider_1_weight" {
+  description = "The relative percentage of the total number of launched tasks that should use the specified capacity provider"
+  default     = "0"
+}
+
+variable "capacity_provider_2_type" {
+  description = "ECS service capacity provider 2"
+  default     = "FARGATE"
+}
+
+variable "capacity_provider_2_base" {
+  description = "The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined"
+  default     = "0"
+}
+
+variable "capacity_provider_2_weight" {
+  description = "The relative percentage of the total number of launched tasks that should use the specified capacity provider"
+  default     = "0"
 }
 
 variable "docker_command" {

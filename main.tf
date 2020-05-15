@@ -223,12 +223,18 @@ locals {
   ecs_service_lb           = "${(module.enabled.value && module.enable_lb.value) || local.lb_existing ? 1 : 0}"
   ecs_service_lb_net       = "${local.ecs_service_lb && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_lb_no_net    = "${local.ecs_service_lb && var.network_mode != "awsvpc" ? 1 : 0}"
+  ecs_service_no_lb_spot        = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb ? 1 : 0}"
+  ecs_service_no_lb_net_spot    = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb_net ? 1 : 0}"
+  ecs_service_no_lb_no_net_spot = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_no_lb_no_net ? 1 : 0}"
+  ecs_service_lb_spot           = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb ? 1 : 0}"
+  ecs_service_lb_net_spot       = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb_net ? 1 : 0}"
+  ecs_service_lb_no_net_spot    = "${var.ecs_launch_type == "FARGATE_SPOT" && local.ecs_service_lb_no_net ? 1 : 0}"
   service_name             = "${module.service_full_name.value ? module.label.id : module.label.name}"
 }
 
 # TODO: add service registry support
 resource "aws_ecs_service" "service-no-lb" {
-  count                              = "${local.ecs_service_no_lb_no_net}"
+  count                              = "${local.ecs_service_no_lb_no_net_spot}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -258,8 +264,51 @@ resource "aws_ecs_service" "service-no-lb" {
   ]
 }
 
+resource "aws_ecs_service" "service-no-lb-spot" {
+  count                              = "${local.ecs_service_no_lb_no_net_spot}"
+  name                               = "${local.service_name}"
+  cluster                            = "${var.ecs_cluster_arn}"
+  deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
+  deployment_minimum_healthy_percent = "${var.ecs_deployment_minimum_healthy_percent}"
+  desired_count                      = "${var.ecs_desired_count}"
+  enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
+  placement_constraints              = "${var.ecs_placement_constraints}"
+  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  propagate_tags                     = "${var.propagate_tags_method}"
+  tags                               = "${module.label.tags}"
+  task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  capacity_provider_strategy {
+    capacity_provider {
+      name    = "${capacity_provider_1_type}"
+      weight  = "${capacity_provider_1_weight}"
+      base    = "${capacity_provider_1_base}"
+    }
+    capacity_provider {
+      name    = "${capacity_provider_2_type}"
+      weight  = "${capacity_provider_2_weight}"
+      base    = "${capacity_provider_2_base}"
+    }
+  }
+
+  ordered_placement_strategy {
+    type  = "${var.ecs_placement_strategy_type}"
+    field = "${var.ecs_placement_strategy_field}"
+  }
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
+
+  depends_on = [
+    "aws_cloudwatch_log_group.task",
+    "aws_ecs_task_definition.task",
+    "aws_iam_role.service",
+  ]
+}
+
 resource "aws_ecs_service" "service-no-lb-net" {
-  count                              = "${local.ecs_service_no_lb_net}"
+  count                              = "${local.ecs_service_no_lb_net_spot}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -296,8 +345,58 @@ resource "aws_ecs_service" "service-no-lb-net" {
   ]
 }
 
+resource "aws_ecs_service" "service-no-lb-net-spot" {
+  count                              = "${local.ecs_service_no_lb_net_spot}"
+  name                               = "${local.service_name}"
+  cluster                            = "${var.ecs_cluster_arn}"
+  deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
+  deployment_minimum_healthy_percent = "${var.ecs_deployment_minimum_healthy_percent}"
+  desired_count                      = "${var.ecs_desired_count}"
+  enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
+  placement_constraints              = "${var.ecs_placement_constraints}"
+  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  propagate_tags                     = "${var.propagate_tags_method}"
+  tags                               = "${module.label.tags}"
+  task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  network_configuration {
+    assign_public_ip = "${var.assign_public_ip}"
+    security_groups  = ["${var.awsvpc_security_group_ids}"]
+    subnets          = ["${var.awsvpc_subnet_ids}"]
+  }
+
+  capacity_provider_strategy {
+    capacity_provider {
+      name    = "${capacity_provider_1_type}"
+      weight  = "${capacity_provider_1_weight}"
+      base    = "${capacity_provider_1_base}"
+    }
+    capacity_provider {
+      name    = "${capacity_provider_2_type}"
+      weight  = "${capacity_provider_2_weight}"
+      base    = "${capacity_provider_2_base}"
+    }
+  }
+
+  /*
+    ordered_placement_strategy {
+      type  = "${var.ecs_placement_strategy_type}"
+      field = "${var.ecs_placement_strategy_field}"
+    }
+    /**/
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
+
+  depends_on = [
+    "aws_cloudwatch_log_group.task",
+    "aws_ecs_task_definition.task",
+    "aws_iam_role.service",
+  ]
+}
+
 resource "aws_ecs_service" "service" {
-  count                              = "${local.ecs_service_lb_no_net}"
+  count                              = "${local.ecs_service_lb_no_net_spot}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -336,8 +435,60 @@ resource "aws_ecs_service" "service" {
   ]
 }
 
+resource "aws_ecs_service" "service-spot" {
+  count                              = "${local.ecs_service_lb_no_net_spot}"
+  name                               = "${local.service_name}"
+  cluster                            = "${var.ecs_cluster_arn}"
+  deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
+  deployment_minimum_healthy_percent = "${var.ecs_deployment_minimum_healthy_percent}"
+  desired_count                      = "${var.ecs_desired_count}"
+  enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
+  health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
+  iam_role                           = "${aws_iam_role.service.arn}"
+  placement_constraints              = "${var.ecs_placement_constraints}"
+  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  propagate_tags                     = "${var.propagate_tags_method}"
+  tags                               = "${module.label.tags}"
+  task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  capacity_provider_strategy {
+    capacity_provider {
+      name    = "${capacity_provider_1_type}"
+      weight  = "${capacity_provider_1_weight}"
+      base    = "${capacity_provider_1_base}"
+    }
+    capacity_provider {
+      name    = "${capacity_provider_2_type}"
+      weight  = "${capacity_provider_2_weight}"
+      base    = "${capacity_provider_2_base}"
+    }
+  }
+
+  ordered_placement_strategy {
+    type  = "${var.ecs_placement_strategy_type}"
+    field = "${var.ecs_placement_strategy_field}"
+  }
+
+  load_balancer = {
+    target_group_arn = "${element(module.lb.target_group_arns, 0)}"
+    container_name   = "${module.label.name}"
+    container_port   = "${var.app_port}"
+  }
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
+
+  depends_on = [
+    "aws_cloudwatch_log_group.task",
+    "aws_ecs_task_definition.task",
+    "aws_iam_role.service",
+    "module.lb",
+  ]
+}
+
 resource "aws_ecs_service" "service-lb-net" {
-  count                              = "${local.ecs_service_lb_net}"
+  count                              = "${local.ecs_service_lb_net_spot}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -353,6 +504,66 @@ resource "aws_ecs_service" "service-lb-net" {
   propagate_tags        = "${var.propagate_tags_method}"
   tags                  = "${module.label.tags}"
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  network_configuration {
+    assign_public_ip = "${var.assign_public_ip}"
+    security_groups  = ["${var.awsvpc_security_group_ids}"]
+    subnets          = ["${var.awsvpc_subnet_ids}"]
+  }
+
+  /*
+    ordered_placement_strategy {
+      type  = "${var.ecs_placement_strategy_type}"
+      field = "${var.ecs_placement_strategy_field}"
+    }
+    /**/
+  load_balancer = {
+    target_group_arn = "${element(module.lb.target_group_arns, 0)}"
+    container_name   = "${module.label.name}"
+    container_port   = "${var.app_port}"
+  }
+
+  lifecycle {
+    ignore_changes = ["desired_count"]
+  }
+
+  depends_on = [
+    "aws_cloudwatch_log_group.task",
+    "aws_ecs_task_definition.task",
+    "aws_iam_role.service",
+    "module.lb",
+  ]
+}
+
+resource "aws_ecs_service" "service-lb-net-spot" {
+  count                              = "${local.ecs_service_lb_net_spot}"
+  name                               = "${local.service_name}"
+  cluster                            = "${var.ecs_cluster_arn}"
+  deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
+  deployment_minimum_healthy_percent = "${var.ecs_deployment_minimum_healthy_percent}"
+  desired_count                      = "${var.ecs_desired_count}"
+  enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
+  health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
+
+  #iam_role                           = "${aws_iam_role.service.arn}"
+  placement_constraints = "${var.ecs_placement_constraints}"
+  platform_version      = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  propagate_tags        = "${var.propagate_tags_method}"
+  tags                  = "${module.label.tags}"
+  task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+
+  capacity_provider_strategy {
+    capacity_provider {
+      name    = "${capacity_provider_1_type}"
+      weight  = "${capacity_provider_1_weight}"
+      base    = "${capacity_provider_1_base}"
+    }
+    capacity_provider {
+      name    = "${capacity_provider_2_type}"
+      weight  = "${capacity_provider_2_weight}"
+      base    = "${capacity_provider_2_base}"
+    }
+  }
 
   network_configuration {
     assign_public_ip = "${var.assign_public_ip}"
