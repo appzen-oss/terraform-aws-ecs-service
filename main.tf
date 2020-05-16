@@ -274,18 +274,14 @@ resource "aws_ecs_service" "service-no-lb-spot" {
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_1_type}"
-      weight  = "${var.capacity_provider_1_weight}"
-      base    = "${var.capacity_provider_1_base}"
-    }
+    capacity_provider = "${var.capacity_provider_1_type}"
+    weight            = "${var.capacity_provider_1_weight}"
+    base              = "${var.capacity_provider_1_base}"
   }
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_2_type}"
-      weight  = "${var.capacity_provider_2_weight}"
-      base    = "${var.capacity_provider_2_base}"
-    }
+    capacity_provider = "${var.capacity_provider_2_type}"
+    weight            = "${var.capacity_provider_2_weight}"
+    base              = "${var.capacity_provider_2_base}"
   }
 
   ordered_placement_strategy {
@@ -368,11 +364,9 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
     base              = "${var.capacity_provider_1_base}"
   }
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_2_type}"
-      weight  = "${var.capacity_provider_2_weight}"
-      base    = "${var.capacity_provider_2_base}"
-    }
+    capacity_provider = "${var.capacity_provider_2_type}"
+    weight            = "${var.capacity_provider_2_weight}"
+    base              = "${var.capacity_provider_2_base}"
   }
 
   /*
@@ -449,18 +443,14 @@ resource "aws_ecs_service" "service-spot" {
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_1_type}"
-      weight  = "${var.capacity_provider_1_weight}"
-      base    = "${var.capacity_provider_1_base}"
-    }
+    capacity_provider = "${var.capacity_provider_1_type}"
+    weight            = "${var.capacity_provider_1_weight}"
+    base              = "${var.capacity_provider_1_base}"
   }
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_2_type}"
-      weight  = "${var.capacity_provider_2_weight}"
-      base    = "${var.capacity_provider_2_base}"
-    }
+    capacity_provider = "${var.capacity_provider_2_type}"
+    weight            = "${var.capacity_provider_2_weight}"
+    base              = "${var.capacity_provider_2_base}"
   }
 
   ordered_placement_strategy {
@@ -552,18 +542,14 @@ resource "aws_ecs_service" "service-lb-net-spot" {
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_1_type}"
-      weight  = "${var.capacity_provider_1_weight}"
-      base    = "${var.capacity_provider_1_base}"
-    }
+    capacity_provider = "${var.capacity_provider_1_type}"
+    weight            = "${var.capacity_provider_1_weight}"
+    base              = "${var.capacity_provider_1_base}"
   }
   capacity_provider_strategy {
-    capacity_provider {
-      name    = "${var.capacity_provider_2_type}"
-      weight  = "${var.capacity_provider_2_weight}"
-      base    = "${var.capacity_provider_2_base}"
-    }
+    capacity_provider = "${var.capacity_provider_2_type}"
+    weight            = "${var.capacity_provider_2_weight}"
+    base              = "${var.capacity_provider_2_base}"
   }
 
   network_configuration {
