@@ -102,7 +102,7 @@ variable "capacity_provider_1_base" {
 
 variable "capacity_provider_1_weight" {
   description = "The relative percentage of the total number of launched tasks that should use the specified capacity provider"
-  default     = "100"
+  default     = "10"
 }
 
 variable "capacity_provider_2_type" {
