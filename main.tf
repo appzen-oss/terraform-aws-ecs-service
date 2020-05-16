@@ -210,7 +210,8 @@ resource "aws_ecs_task_definition" "task" {
   tags                     = "${module.label.tags}"
   task_role_arn            = "${var.task_role_arn == "" ? aws_iam_role.task.arn : var.task_role_arn}"
   volume                   = "${var.docker_volumes}"
-  requires_compatibilities = ["${contains(var.requires_compatibilities,"FARGATE_SPOT") ? split(",","FARGATE") : var.requires_compatibilities}"]
+  #requires_compatibilities = ["${contains(var.requires_compatibilities,"FARGATE_SPOT") ? split(",","FARGATE") : var.requires_compatibilities}"]
+  requires_compatibilities = ["FARGATE"]
   cpu                      = "${var.docker_cpu}"
   memory                   = "${var.docker_memory}"
   execution_role_arn       = "${var.task_execution_role_arn}"
