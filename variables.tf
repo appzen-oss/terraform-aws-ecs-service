@@ -97,12 +97,12 @@ variable "capacity_provider_1_type" {
 
 variable "capacity_provider_1_base" {
   description = "The number of tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined"
-  default     = "100"
+  default     = "0"
 }
 
 variable "capacity_provider_1_weight" {
   description = "The relative percentage of the total number of launched tasks that should use the specified capacity provider"
-  default     = "0"
+  default     = "100"
 }
 
 variable "capacity_provider_2_type" {
