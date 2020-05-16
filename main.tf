@@ -211,7 +211,7 @@ resource "aws_ecs_task_definition" "task" {
   task_role_arn            = "${var.task_role_arn == "" ? aws_iam_role.task.arn : var.task_role_arn}"
   volume                   = "${var.docker_volumes}"
   #requires_compatibilities = ["${contains(var.requires_compatibilities,"FARGATE_SPOT") ? split(",","FARGATE") : var.requires_compatibilities}"]
-  #requires_compatibilities = ["FARGATE_SPOT"]
+  requires_compatibilities = ["FARGATE_SPOT"]
   cpu                      = "${var.docker_cpu}"
   memory                   = "${var.docker_memory}"
   execution_role_arn       = "${var.task_execution_role_arn}"
@@ -279,6 +279,8 @@ resource "aws_ecs_service" "service-no-lb-spot" {
       weight  = "${var.capacity_provider_1_weight}"
       base    = "${var.capacity_provider_1_base}"
     }
+  }
+  capacity_provider_strategy {
     capacity_provider {
       name    = "${var.capacity_provider_2_type}"
       weight  = "${var.capacity_provider_2_weight}"
@@ -365,14 +367,13 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
     weight            = "${var.capacity_provider_1_weight}"
     base              = "${var.capacity_provider_1_base}"
   }
-/*
+  capacity_provider_strategy {
     capacity_provider {
       name    = "${var.capacity_provider_2_type}"
       weight  = "${var.capacity_provider_2_weight}"
       base    = "${var.capacity_provider_2_base}"
     }
   }
-*/
 
   /*
     ordered_placement_strategy {
@@ -453,6 +454,8 @@ resource "aws_ecs_service" "service-spot" {
       weight  = "${var.capacity_provider_1_weight}"
       base    = "${var.capacity_provider_1_base}"
     }
+  }
+  capacity_provider_strategy {
     capacity_provider {
       name    = "${var.capacity_provider_2_type}"
       weight  = "${var.capacity_provider_2_weight}"
@@ -554,6 +557,8 @@ resource "aws_ecs_service" "service-lb-net-spot" {
       weight  = "${var.capacity_provider_1_weight}"
       base    = "${var.capacity_provider_1_base}"
     }
+  }
+  capacity_provider_strategy {
     capacity_provider {
       name    = "${var.capacity_provider_2_type}"
       weight  = "${var.capacity_provider_2_weight}"
