@@ -272,7 +272,7 @@ resource "aws_ecs_service" "service-no-lb-spot" {
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
-capacity_provider_strategy {
+  capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
     weight = 1
   }
@@ -367,6 +367,11 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
   }
 
   capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight = 1
+  }
+/*
+  capacity_provider_strategy {
     capacity_provider {
       name    = "${var.capacity_provider_1_type}"
       weight  = "${var.capacity_provider_1_weight}"
@@ -378,6 +383,7 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
       base    = "${var.capacity_provider_2_base}"
     }
   }
+*/
 
   /*
     ordered_placement_strategy {
