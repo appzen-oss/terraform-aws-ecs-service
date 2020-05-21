@@ -87,7 +87,7 @@ This software is released under the MIT License (see `LICENSE`).
 | enabled | Set to false to prevent the module from creating anything | string | `"true"` | no |
 | environment | Environment (ex: `dev`, `qa`, `stage`, `prod`). (Second or top level namespace. Depending on namespacing options) | string | n/a | yes |
 | extra\_task\_policy\_arns | List of ARNs of IAM policies to be attached to the ECS task role (in addition to the default policy, so cannot be more than 9 ARNs) | list | `<list>` | no |
-| firelens_host_url | URL of firelense application | string | `""` | no |
+| firelens_host_url | URL of firelens application | string | `""` | no |
 | firelens_port | Port of firelens application (default 24224) | string | `"24224"` | no |
 | lb\_cookie\_duration | Duration of LB session stickiness cookie in seconds (default 86400) | string | `"86400"` | no |
 | lb\_enable\_http | Enable HTTP listener in LB (http or https MUST be enabled) | string | `"true"` | no |

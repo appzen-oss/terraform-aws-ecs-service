@@ -308,33 +308,33 @@ variable "container_definition_additional" {
 }
 
 variable "firelens_port" {
-  description = "This is firelens port"
+  description = "Port of firelens application (default 24224)"
   default     = "24224"
 }
 
 variable "firelens_host_url" {
-  description = "This is firelens Host"
+  description = "URL of firelens application"
   default     = ""
 }
 
 variable "sidecar_container_definition_additional" {
-  description = "Additional parameters to add to container definition. This is a json substring"
+  description = "Sidecar Additional parameters to add to container definition. This is a json substring"
   default     = ""
 }
 
 variable "sidecar_docker_image" {
-  description = "Docker image to use for task"
+  description = "Sidecar Docker image to use for task"
   type        = "string"
   default     = ""
 }
 
 variable "sidecar_docker_environment" {
-  description = "List of environment maps of format { \"name\" = \"var_name\", \"value\" = \"var_value\" }"
+  description = "Sidecar List of environment maps of format { \"name\" = \"var_name\", \"value\" = \"var_value\" }"
   type        = "list"
   default     = []
 }
 
 variable "sidecar_docker_memory_reservation" {
-  description = "Soft limit on memory use for task container (default 128)"
+  description = "Sidecar Soft limit on memory use for task container (default 128)"
   default     = 128
 }
