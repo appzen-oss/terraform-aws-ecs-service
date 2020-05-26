@@ -75,7 +75,7 @@ module "lb" {
   enabled = "${module.enabled.value && module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
 
   target_group_only = "${local.lb_existing}"
-  target_type       = "${var.target_type}"
+  target_type       = "${var.ecs_launch_type == "EC2" ? "instance" : "ip"}"
   name              = "${module.label.name}"
   attributes        = "${var.attributes}"
   delimiter         = "${var.delimiter}"
