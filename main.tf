@@ -450,6 +450,12 @@ resource "aws_ecs_service" "service" {
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
+  network_configuration {
+    assign_public_ip = "${var.assign_public_ip}"
+    security_groups  = ["${var.awsvpc_security_group_ids}"]
+    subnets          = ["${var.awsvpc_subnet_ids}"]
+  }
+
 
   ordered_placement_strategy {
     type  = "${var.ecs_placement_strategy_type}"
