@@ -254,7 +254,7 @@ resource "aws_ecs_task_definition" "task" {
   count                    = "${module.enabled.value && var.task_definition_arn == "" ? 1 : 0}"
   family                   = "${module.label.id}"
   container_definitions    = "${local.container_definitions}"
-  network_mode             = "${var.network_mode}"
+  network_mode             = "${var.ecs_launch_type == "EC2" ? var.network_mode : "awsvpc"}"
   tags                     = "${module.label.tags}"
   task_role_arn            = "${var.task_role_arn == "" ? aws_iam_role.task.arn : var.task_role_arn}"
   volume                   = "${var.docker_volumes}"
