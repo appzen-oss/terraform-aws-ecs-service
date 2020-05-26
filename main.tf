@@ -198,14 +198,62 @@ data "template_file" "container_definition" {
   }
 }
 
+# sidecar container_definition
+data "template_file" "sidecar_container_definition" {
+  count    = "${module.enabled.value}"
+  template = "${file("${path.module}/files/sidecar_container_definition.json")}"
+
+  vars {
+    name                  = "log_router"
+    image                 = "${var.docker_registry != "" ? "${var.docker_registry}/${var.sidecar_docker_image}" : var.sidecar_docker_image}"
+    memory                = "${var.docker_memory}"
+    memory_reservation    = "${var.sidecar_docker_memory_reservation}"
+    environment           = "${jsonencode(var.sidecar_docker_environment)}"
+    awslogs_group         = "${local.log_group_name}"
+    awslogs_region        = "${var.region}"
+    awslogs_stream_prefix = "${module.label.environment}"
+    additional_config     = "${var.sidecar_container_definition_additional == "" ? "" :
+    ",${var.sidecar_container_definition_additional}"}"
+  }
+}
+
+# application_with_firelens_container_definition
+data "template_file" "firelens_container_definition" {
+  count    = "${module.enabled.value}"
+  template = "${file("${path.module}/files/container_definition_firelens.json")}"
+
+  # ADD: networkMode?, cpu
+  vars {
+    name               = "${module.label.name}"
+    image              = "${var.docker_registry != "" ? "${var.docker_registry}/${var.docker_image}" : var.docker_image}"
+    memory             = "${var.docker_memory}"
+    memory_reservation = "${var.docker_memory_reservation}"
+
+    #app_port              = "${var.app_port}"
+    port_mappings         = "${replace(jsonencode(var.docker_port_mappings), "/\"([0-9]+)\"/", "$1")}"
+    command_override      = "${length(var.docker_command) > 0 ? "\"command\": [\"${var.docker_command}\"]," : ""}"
+    environment           = "${jsonencode(var.docker_environment)}"
+    mount_points          = "${replace(jsonencode(var.docker_mount_points), "\"true\"", true)}"
+    firelens_host         = "${var.firelens_host_url}"
+    firelens_port         = "${var.firelens_port}"
+    additional_config     = "${var.container_definition_additional == "" ? "" :
+    ",${var.container_definition_additional}"}"
+  }
+}
+
 # FIX: resource cannot be found if it fails
 #   when passing in container_definition, if def bad, wrong format, invalid arg, etc.
 # Look into support for sidecars, proxy, (AppMesh)
+
+locals { 
+   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered}]"}"
+}
+
 resource "aws_ecs_task_definition" "task" {
   #count                 = "${module.enabled.value}"
   count                    = "${module.enabled.value && var.task_definition_arn == "" ? 1 : 0}"
   family                   = "${module.label.id}"
-  container_definitions    = "${var.container_definition == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : var.container_definition}"
+  container_definitions    = "${local.container_definitions}"
   network_mode             = "${var.network_mode}"
   tags                     = "${module.label.tags}"
   task_role_arn            = "${var.task_role_arn == "" ? aws_iam_role.task.arn : var.task_role_arn}"

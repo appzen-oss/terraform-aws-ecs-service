@@ -87,6 +87,8 @@ This software is released under the MIT License (see `LICENSE`).
 | enabled | Set to false to prevent the module from creating anything | string | `"true"` | no |
 | environment | Environment (ex: `dev`, `qa`, `stage`, `prod`). (Second or top level namespace. Depending on namespacing options) | string | n/a | yes |
 | extra\_task\_policy\_arns | List of ARNs of IAM policies to be attached to the ECS task role (in addition to the default policy, so cannot be more than 9 ARNs) | list | `<list>` | no |
+| firelens_host_url | URL of firelens application | string | `""` | no |
+| firelens_port | Port of firelens application (default 24224) | string | `"24224"` | no |
 | lb\_cookie\_duration | Duration of LB session stickiness cookie in seconds (default 86400) | string | `"86400"` | no |
 | lb\_enable\_http | Enable HTTP listener in LB (http or https MUST be enabled) | string | `"true"` | no |
 | lb\_enable\_https | Enable HTTPS listener in LB (http or https MUST be enabled) | string | `"false"` | no |
@@ -117,6 +119,10 @@ This software is released under the MIT License (see `LICENSE`).
 | propagate\_tags\_method | Propagate tags from the task definition or the service to the tasks. The valid values are SERVICE and TASK_DEFINITION | string | `"SERVICE"` | no |
 | region | AWS region in which ECS cluster is located (default is 'us-east-1') | string | `"us-east-1"` | no |
 | service\_identifier | Unique identifier for this pganalyze service (used in log prefix, service name etc.) | string | `"service"` | no |
+| sidecar\_docker\_image | Sidecar Docker image to use for task | string | `""` | no |
+| sidecar\_container\_definition\_additional | Sidecar Additional parameters to add to container definition. This is a json substring | string | `""` | no | 
+| sidecar\_docker\_environment | Sidecar List of environment maps of format { "name" = "var_name", "value" = "var_value" } | list | `<list>` | no |
+| sidecar\_docker\_memory\_reservation | Sidecar Soft limit on memory use for task container (default 512) | string | `"512"` | no |
 | tags | A map of additional tags | map | `<map>` | no |
 | target\_group\_only | Only create target group without a load balancer. For when more advanced LB setups are required | string | `"false"` | no |
 | target\_type | Type for targets for target group. Can be: instance or ip | string | `"instance"` | no |
