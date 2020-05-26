@@ -443,7 +443,7 @@ resource "aws_ecs_service" "service" {
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
-  iam_role                           = "${aws_iam_role.service.arn}"
+  iam_role                           = "${var.ecs_launch_type == "EC2" ? aws_iam_role.service.arn : ""}"
   launch_type                        = "${var.ecs_launch_type}"
   placement_constraints              = "${var.ecs_placement_constraints}"
   platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
