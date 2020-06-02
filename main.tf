@@ -277,7 +277,7 @@ locals {
 
 # TODO: add service registry support
 resource "aws_ecs_service" "service-no-lb" {
-  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type != "FARGATE_SPOT" ? 1 : 0}"
+  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type == "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -349,7 +349,7 @@ resource "aws_ecs_service" "service-no-lb-fargate" {
 }
 
 resource "aws_ecs_service" "service-no-lb-net" {
-  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type != "FARGATE_SPOT" ? 1 : 0}"
+  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type == "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -435,7 +435,7 @@ resource "aws_ecs_service" "service-no-lb-net-fargate" {
 }
 
 resource "aws_ecs_service" "service" {
-  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type != "FARGATE_SPOT" ? 1 : 0}"
+  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type == "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -533,7 +533,7 @@ resource "aws_ecs_service" "service-fargate" {
 }
 
 resource "aws_ecs_service" "service-lb-net" {
-  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type != "FARGATE_SPOT" ? 1 : 0}"
+  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type == "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
