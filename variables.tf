@@ -92,7 +92,7 @@ variable "ecs_launch_type" {
 
 variable "capacity_provider_1_type" {
   description = "ECS service capacity provider 1"
-  default     = "FARGATE_SPOT"
+  default     = ""
 }
 
 variable "capacity_provider_1_base" {

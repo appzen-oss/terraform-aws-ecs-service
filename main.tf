@@ -265,6 +265,7 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 locals {
+  capacity_provider_1_type = "${var.capacity_provider_1_type == "" ? var.ecs_launch_type : var.capacity_provider_1_type}"
   ecs_service_no_lb        = "${module.enabled.value && ! module.enable_lb.value && ! local.lb_existing ? 1 : 0}"
   ecs_service_no_lb_net    = "${local.ecs_service_no_lb && var.network_mode == "awsvpc" ? 1 : 0}"
   ecs_service_no_lb_no_net = "${local.ecs_service_no_lb && var.network_mode != "awsvpc" ? 1 : 0}"
@@ -306,8 +307,8 @@ resource "aws_ecs_service" "service-no-lb" {
   ]
 }
 
-resource "aws_ecs_service" "service-no-lb-spot" {
-  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type == "FARGATE_SPOT" ? 1 : 0}"
+resource "aws_ecs_service" "service-no-lb-fargate" {
+  count                              = "${local.ecs_service_no_lb_no_net == 1 && var.ecs_launch_type != "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -321,7 +322,7 @@ resource "aws_ecs_service" "service-no-lb-spot" {
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider = "${var.capacity_provider_1_type}"
+    capacity_provider = "${local.capacity_provider_1_type}"
     weight            = "${var.capacity_provider_1_weight}"
     base              = "${var.capacity_provider_1_base}"
   }
@@ -385,8 +386,8 @@ resource "aws_ecs_service" "service-no-lb-net" {
   ]
 }
 
-resource "aws_ecs_service" "service-no-lb-net-spot" {
-  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type == "FARGATE_SPOT" ? 1 : 0}"
+resource "aws_ecs_service" "service-no-lb-net-fargate" {
+  count                              = "${local.ecs_service_no_lb_net == 1 && var.ecs_launch_type != "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -406,7 +407,7 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
   }
 
   capacity_provider_strategy {
-    capacity_provider = "${var.capacity_provider_1_type}"
+    capacity_provider = "${local.capacity_provider_1_type}"
     weight            = "${var.capacity_provider_1_weight}"
     base              = "${var.capacity_provider_1_base}"
   }
@@ -481,8 +482,8 @@ resource "aws_ecs_service" "service" {
   ]
 }
 
-resource "aws_ecs_service" "service-spot" {
-  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type == "FARGATE_SPOT" ? 1 : 0}"
+resource "aws_ecs_service" "service-fargate" {
+  count                              = "${local.ecs_service_lb_no_net == 1 && var.ecs_launch_type != "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -498,7 +499,7 @@ resource "aws_ecs_service" "service-spot" {
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider = "${var.capacity_provider_1_type}"
+    capacity_provider = "${local.capacity_provider_1_type}"
     weight            = "${var.capacity_provider_1_weight}"
     base              = "${var.capacity_provider_1_base}"
   }
@@ -579,8 +580,8 @@ resource "aws_ecs_service" "service-lb-net" {
   ]
 }
 
-resource "aws_ecs_service" "service-lb-net-spot" {
-  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type == "FARGATE_SPOT" ? 1 : 0}"
+resource "aws_ecs_service" "service-lb-net-fargate" {
+  count                              = "${local.ecs_service_lb_net == 1 && var.ecs_launch_type != "EC2" ? 1 : 0}"
   name                               = "${local.service_name}"
   cluster                            = "${var.ecs_cluster_arn}"
   deployment_maximum_percent         = "${var.ecs_deployment_maximum_percent}"
@@ -597,7 +598,7 @@ resource "aws_ecs_service" "service-lb-net-spot" {
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
 
   capacity_provider_strategy {
-    capacity_provider = "${var.capacity_provider_1_type}"
+    capacity_provider = "${local.capacity_provider_1_type}"
     weight            = "${var.capacity_provider_1_weight}"
     base              = "${var.capacity_provider_1_base}"
   }
