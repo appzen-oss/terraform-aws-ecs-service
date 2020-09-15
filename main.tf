@@ -55,9 +55,11 @@ module "label" {
 }
 
 locals {
-  lb_protocols   = "${var.lb_enable_http ? "HTTP" : ""},${var.lb_enable_https ? "HTTPS" : ""}"
-  log_group_name = "/ecs/${module.label.id}"
-  sg_rules       = "${var.lb_enable_http ? "http-80-tcp" : ""},${var.lb_enable_https ? "https-443-tcp" : ""}"
+  fargate_types     = [ "FARGATE", "FARGATE_SPOT"]
+  lb_protocols      = "${var.lb_enable_http ? "HTTP" : ""},${var.lb_enable_https ? "HTTPS" : ""}"
+  log_group_name    = "/ecs/${module.label.id}"
+  platform_version  = "${contains(local.fargate_types, var.ecs_launch_type) && var.platform_version != "" ? var.platform_version : ""}"
+  sg_rules          = "${var.lb_enable_http ? "http-80-tcp" : ""},${var.lb_enable_https ? "https-443-tcp" : ""}"
 
   lb_existing = "${
     var.lb_listener_arn != "" &&
@@ -245,7 +247,7 @@ data "template_file" "firelens_container_definition" {
 #   when passing in container_definition, if def bad, wrong format, invalid arg, etc.
 # Look into support for sidecars, proxy, (AppMesh)
 
-locals { 
+locals {
    container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered}]"}"
 }
 
@@ -285,7 +287,7 @@ resource "aws_ecs_service" "service-no-lb" {
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   launch_type                        = "${var.ecs_launch_type}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -315,7 +317,7 @@ resource "aws_ecs_service" "service-no-lb-spot" {
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -357,7 +359,7 @@ resource "aws_ecs_service" "service-no-lb-net" {
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   launch_type                        = "${var.ecs_launch_type}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -394,7 +396,7 @@ resource "aws_ecs_service" "service-no-lb-net-spot" {
   desired_count                      = "${var.ecs_desired_count}"
   enable_ecs_managed_tags            = "${var.enable_ecs_managed_tags}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -445,7 +447,7 @@ resource "aws_ecs_service" "service" {
   iam_role                           = "${var.ecs_launch_type == "EC2" ? aws_iam_role.service.arn : ""}"
   launch_type                        = "${var.ecs_launch_type}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -492,7 +494,7 @@ resource "aws_ecs_service" "service-spot" {
   health_check_grace_period_seconds  = "${var.ecs_health_check_grace_period_seconds}"
   iam_role                           = "${aws_iam_role.service.arn}"
   placement_constraints              = "${var.ecs_placement_constraints}"
-  platform_version                   = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version                   = "${local.platform_version}"
   propagate_tags                     = "${var.propagate_tags_method}"
   tags                               = "${module.label.tags}"
   task_definition                    = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -544,7 +546,7 @@ resource "aws_ecs_service" "service-lb-net" {
   #iam_role                           = "${aws_iam_role.service.arn}"
   launch_type           = "${var.ecs_launch_type}"
   placement_constraints = "${var.ecs_placement_constraints}"
-  platform_version      = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version      = "${local.platform_version}"
   propagate_tags        = "${var.propagate_tags_method}"
   tags                  = "${module.label.tags}"
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
@@ -591,7 +593,7 @@ resource "aws_ecs_service" "service-lb-net-spot" {
 
   #iam_role                           = "${aws_iam_role.service.arn}"
   placement_constraints = "${var.ecs_placement_constraints}"
-  platform_version      = "${var.ecs_launch_type == "FARGATE" && var.platform_version != "" ? var.platform_version: ""}"
+  platform_version      = "${local.platform_version}"
   propagate_tags        = "${var.propagate_tags_method}"
   tags                  = "${module.label.tags}"
   task_definition       = "${var.task_definition_arn == "" ? aws_ecs_task_definition.task.arn : var.task_definition_arn}"
