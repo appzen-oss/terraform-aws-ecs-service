@@ -93,6 +93,9 @@ module "lb" {
   lb_https_ports    = "${var.lb_https_ports}"
   subnets           = "${var.lb_subnet_ids}"
 
+  enable_logging      = "${var.lb_enable_logging}"
+  log_bucket_name     = "${var.lb_log_bucket_name}" 
+  log_location_prefix = "${var.lb_log_location_prefix}"  
   /*
   subnets               = "${split(",",
     var.lb_internal ?
