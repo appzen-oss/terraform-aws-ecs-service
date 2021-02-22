@@ -114,6 +114,22 @@ variable "lb_type" {
   default     = "application"
 }
 
+variable "lb_enable_logging" {
+  type        = "string"
+  description = "Enable the LB to write log entries to S3."
+  default     = "false"
+}
+
+variable "lb_log_bucket_name" {
+  description = "S3 bucket for storing LB access logs. To create the bucket \"create_log_bucket\" should be set to true."
+  default     = ""
+}
+
+variable "lb_log_location_prefix" {
+  description = "S3 prefix within the log_bucket_name under which logs are stored."
+  default     = ""
+}
+
 # Remove?
 variable "target_group_only" {
   description = "Only create target group without a load balancer. For when more advanced LB setups are required"
