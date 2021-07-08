@@ -338,3 +338,29 @@ variable "sidecar_docker_memory_reservation" {
   description = "Sidecar Soft limit on memory use for task container (default 128)"
   default     = 128
 }
+
+variable "telegraf_sidecar_container_definition_additional" {
+  description = "Sidecar Additional parameters to add to container definition. This is a json substring"
+  default     = ""
+}
+
+variable "telegraf_sidecar_docker_image" {
+  description = "Sidecar Docker image to use for task"
+  type        = "string"
+  default     = ""
+}
+
+variable "telegraf_sidecar_docker_environment" {
+  description = "Sidecar List of environment maps of format { \"name\" = \"var_name\", \"value\" = \"var_value\" }"
+  type        = "list"
+  default     = []
+}
+
+variable "telegraf_sidecar_docker_memory_reservation" {
+  description = "Sidecar Soft limit on memory use for task container (default 128)"
+  default     = 128
+}
+variable "enable_telegraf" {
+  description = "Enable/disable telegraf"
+  default     = "true"
+}
