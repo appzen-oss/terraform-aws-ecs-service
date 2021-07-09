@@ -362,5 +362,5 @@ variable "telegraf_sidecar_docker_memory_reservation" {
 }
 variable "enable_telegraf" {
   description = "Enable/disable telegraf"
-  default     = "true"
+  default     = "false"
 }
