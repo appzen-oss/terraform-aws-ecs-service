@@ -9,9 +9,9 @@
   "environment": ${environment},
   "mountPoints": [
   {
-     "readOnly": null,
-     "containerPath": "${container_path}",
-     "sourceVolume": "${source_volume_name}"
+    "readOnly": null,
+    "containerPath": "${container_path}",
+    "sourceVolume": "${source_volume_name}"
   }
   ],
   "volumesFrom": [],
