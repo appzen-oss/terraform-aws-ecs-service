@@ -393,3 +393,13 @@ variable "promtail_sidecar_docker_memory_reservation" {
   description = "Sidecar Soft limit on memory use for task container (default 128)"
   default     = 128
 }
+
+variable "container_path" {
+  description = "Port of firelens application (default 24224)"
+  default     = "/tmp/"
+}
+
+variable "source_volume_name" {
+  description = "URL of firelens application"
+  default     = "logvolume"
+}

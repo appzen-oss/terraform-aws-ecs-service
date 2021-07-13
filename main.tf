@@ -258,6 +258,8 @@ data "template_file" "promtail_sidecar_container_definition" {
     memory                = "${var.docker_memory}"
     memory_reservation    = "${var.promtail_sidecar_docker_memory_reservation}"
     environment           = "${jsonencode(var.promtail_sidecar_docker_environment)}"
+    container_path        = "${var.container_path}"
+    source_volume_name    = "${var.source_volume_name}"
     awslogs_group         = "${local.log_group_name}"
     awslogs_region        = "${var.region}"
     awslogs_stream_prefix = "${module.label.environment}"
