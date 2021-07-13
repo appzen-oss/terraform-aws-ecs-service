@@ -11,7 +11,13 @@
         }
 	],
         "environment": ${environment},
-        "mountPoints": [],
+        "mountPoints": [
+        {
+          "readOnly": null,
+          "containerPath": "${container_path}",
+          "sourceVolume": "${source_volume_name}"
+        }
+        ],
         "firelensConfiguration": {
             "type": "fluentbit",
             "options": {
