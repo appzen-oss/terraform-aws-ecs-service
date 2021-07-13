@@ -3,7 +3,13 @@
         "image": "${image}",
         "memory": ${memory},
         "memoryReservation": ${memory_reservation},
-        "portMappings": [],
+        "portMappings": [
+        {
+           "containerPort": 2020,
+           "hostPort": 2020,
+           "protocol": "tcp"
+        }
+	],
         "environment": ${environment},
         "mountPoints": [],
         "firelensConfiguration": {
