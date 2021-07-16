@@ -366,12 +366,6 @@ variable "enable_telegraf" {
   default     = "false"
 }
 
-variable "ephemeral_storage" {
-  description = "List of volume maps of format { \"size_in_gib\" = \"21\"}"
-  type        = "list"
-  default     = []
-}
-
 variable "promtail_sidecar_container_definition_additional" {
   description = "Sidecar Additional parameters to add to container definition. This is a json substring"
   default     = ""
