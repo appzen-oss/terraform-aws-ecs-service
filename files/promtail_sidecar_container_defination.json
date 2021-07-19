@@ -1,0 +1,27 @@
+{
+  "name": "${name}",
+  "image": "${image}",
+  "portMappings": [],
+  "essential": false,
+  "memory": ${memory},
+  "memoryReservatin": ${memory_reservation},
+  "memoryReservation": ${memory_reservation},
+  "environment": ${environment},
+  "mountPoints": [
+  {
+    "readOnly": null,
+    "containerPath": "${container_path}",
+    "sourceVolume": "${source_volume_name}"
+  }
+  ],
+  "volumesFrom": [],
+  "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group" : "${awslogs_group}",
+        "awslogs-region": "${awslogs_region}",
+        "awslogs-stream-prefix": "${awslogs_stream_prefix}"
+      }
+  }
+  ${additional_config}
+}
