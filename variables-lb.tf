@@ -33,6 +33,11 @@ variable "lb_healthcheck_interval" {
   default     = 30
 }
 
+variable "idle_timeout" {
+  description = "The time in seconds that the connection is allowed to be idle"
+  default     = "60"
+}
+
 variable "lb_healthcheck_path" {
   description = "URI path for LB health checks (default /)"
   default     = "/"
