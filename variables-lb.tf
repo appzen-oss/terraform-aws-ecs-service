@@ -33,7 +33,7 @@ variable "lb_healthcheck_interval" {
   default     = 30
 }
 
-variable "idle_timeout" {
+variable "lb_idle_timeout" {
   description = "The time in seconds that the connection is allowed to be idle"
   default     = "60"
 }
