@@ -117,6 +117,7 @@ module "lb" {
   health_check_port                = "${var.lb_healthcheck_port}"
   health_check_protocol            = "${var.lb_healthcheck_protocol}"
   health_check_timeout             = "${var.lb_healthcheck_timeout}"
+  idle_timeout                     = "${var.idle_timeout}"
   health_check_healthy_threshold   = "${var.lb_healthcheck_healthy_threshold}"
   health_check_unhealthy_threshold = "${var.lb_healthcheck_unhealthy_threshold}"
   health_check_matcher             = "${var.lb_healthcheck_matcher}"
