@@ -138,5 +138,5 @@ output "container_json" {
 
 output "label" {
   description = ""
-  value       = "${module.label}"
+  value       = "${module.label.tags}"
 }
