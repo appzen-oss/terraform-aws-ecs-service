@@ -135,3 +135,8 @@ output "container_json" {
   description = ""
   value       = "${local.container_definitions}"
 }
+
+output "label" {
+  description = ""
+  value       = "${module.label}"
+}
