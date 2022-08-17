@@ -207,6 +207,11 @@ variable "security_group_ids" {
   default     = []
 }
 
+variable "service" {
+  description = "label service name"
+  default     = ""
+}
+
 variable "service_full_name" {
   description = "Use full name (id from label module) instead of short name for service name"
   default     = false
