@@ -424,3 +424,18 @@ variable "cleanup_sidecar_docker_memory_reservation" {
   description = "Sidecar Soft limit on memory use for task container (default 128)"
   default     = 128
 }
+
+variable "component" {
+  description = "label component name"
+  default     = ""
+}
+
+variable "product" {
+  description = "label product name"
+  default     = ""
+}
+
+variable "team" {
+  description = "label team name"
+  default     = ""
+}

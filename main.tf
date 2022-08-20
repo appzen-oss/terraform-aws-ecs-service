@@ -57,7 +57,10 @@ module "label" {
   namespace-env = "${var.namespace-env}"
   namespace-org = "${var.namespace-org}"
   organization  = "${var.organization}"
+  component     = "${var.component}"
+  product       = "${var.product}"
   service       = "${var.service == "" ? var.name : var.service}"
+  team          = "${var.team}"
   tags          = "${var.tags}"
 }
 
