@@ -341,7 +341,7 @@ resource "aws_ecs_task_definition" "task" {
   cpu                      = "${var.docker_cpu}"
   memory                   = "${var.docker_memory}"
   execution_role_arn       = "${var.task_execution_role_arn}"
-  #ephemeral_storage        = "${var.ephemeral_storage}"
+  ephemeral_storage        = "${var.ephemeral_storage}"
 }
 
 locals {
