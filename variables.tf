@@ -441,6 +441,6 @@ variable "team" {
 }
 
 variable "ephemeral_storage" {
-  description = "ephemeral_storage in GB: default is 20, max is 200"
-  default     = "20"
+  description = "ephemeral_storage in GB: minimum is 21, max is 200"
+  default     = "21"
 }
