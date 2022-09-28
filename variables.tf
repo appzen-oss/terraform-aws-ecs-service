@@ -439,8 +439,3 @@ variable "team" {
   description = "label team name"
   default     = ""
 }
-
-variable "ephemeral_storage" {
-  description = "ephemeral_storage in GB: default is 20, max is 200"
-  default     = "20"
-}
