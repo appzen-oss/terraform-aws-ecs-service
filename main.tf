@@ -171,9 +171,9 @@ resource "aws_lb_listener_rule" "static" {
 
 # DNS for LB
 module "route53-aliases" {
-  #source = "git::https://github.com/devops-workflow/terraform-aws-route53-alias.git"
-  source  = "devops-workflow/route53-alias/aws"
-  version = "0.2.4"
+  source = "git::https://github.com/devops-workflow/terraform-aws-route53-alias.git"
+  #source  = "devops-workflow/route53-alias/aws"
+  #version = "0.2.4"
   enabled = "${module.enabled.value && module.enable_lb.value ? 1 : 0}"
 
   #aliases = "${compact(concat(list(module.label.name), var.dns_aliases))}"
