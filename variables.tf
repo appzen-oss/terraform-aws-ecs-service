@@ -169,6 +169,11 @@ variable "docker_registry" {
   default     = ""
 }
 
+variable "sidecar_docker_registry" {
+  description = "Docker register for sidecar docker image"
+  default     = ""
+}
+
 variable "docker_volumes" {
   description = "List of volume maps of format { \"name\" = \"var_name\", \"host_path\" = \"var_value\" }"
   type        = "list"
