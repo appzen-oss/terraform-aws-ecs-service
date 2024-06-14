@@ -221,7 +221,7 @@ data "template_file" "sidecar_container_definition" {
 
   vars {
     name                  = "log_router"
-    image                 = "${var.docker_registry != "" ? "${var.docker_registry}/${var.sidecar_docker_image}" : var.sidecar_docker_image}"
+    image                 = "${var.docker_registry != "" ? "${var.sidecar_docker_registry}/${var.sidecar_docker_image}" : var.sidecar_docker_image}"
     memory                = "${var.docker_memory}"
     memory_reservation    = "${var.sidecar_docker_memory_reservation}"
     environment           = "${jsonencode(var.sidecar_docker_environment)}"
