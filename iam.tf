@@ -101,3 +101,4 @@ resource "aws_iam_role_policy_attachment" "task_extra" {
   role       = "${aws_iam_role.task.name}"
   policy_arn = "${var.extra_task_policy_arns[count.index]}"
 }
+
