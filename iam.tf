@@ -40,6 +40,7 @@ data "aws_iam_policy_document" "task_policy" {
   }
 }
 
+
 # var.task_role_arn == ""
 data "aws_iam_policy_document" "assume_role_task" {
   count = "${module.enabled.value}"
