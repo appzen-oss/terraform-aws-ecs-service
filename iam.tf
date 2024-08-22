@@ -31,13 +31,16 @@ data "aws_iam_policy_document" "task_policy" {
     resources = [
       "*",
     ]
-  },
- {
-      "Effect": "Allow",
-      "Action": [
+  }
+
+  statement {
+    effect =  "Allow"
+    actions = [
       "sts:AssumeRole"
-      ],
-      "Resource": "arn:aws:iam::260923687808:role/*"
+    ]
+    resources = [
+      "arn:aws:iam::260923687808:role/*"
+    ]
   }
 }
 
