@@ -10,9 +10,13 @@
         "logConfiguration": {
             "logDriver": "awsfirelens",
             "options": {
-               "Name": "forward",
-               "Host": "${firelens_host}",
-               "Port": "${firelens_port}"
+                "bucket": "appzen-infra-us-s3-ecs-log",
+                "total_file_size": "1M",
+                "use_put_object": "On",
+                "upload_timeout": "5m",
+                "region": "${var.region}",
+                "Name": "s3",
+                "retry_limit": "2"
             }
         }
         ${additional_config}
