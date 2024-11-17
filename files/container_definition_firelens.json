@@ -14,7 +14,7 @@
                 "total_file_size": "1M",
                 "use_put_object": "On",
                 "upload_timeout": "5m",
-                "region": "${var.region}",
+                "region": "${awslogs_region}",
                 "Name": "s3",
                 "retry_limit": "2"
             }
