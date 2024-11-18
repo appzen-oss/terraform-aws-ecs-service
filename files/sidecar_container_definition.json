@@ -1,7 +1,6 @@
     {
         "name": "${name}",
         "image": "${image}",
-        "memory": [],
         "memoryReservation": ${memory_reservation},
         "portMappings": [],
         "essential": true,
