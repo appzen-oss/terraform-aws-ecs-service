@@ -1,14 +1,14 @@
     {
         "name": "${name}",
         "image": "${image}",
-        "memory": ${memory},
+        "memory": [],
         "memoryReservation": ${memory_reservation},
         "portMappings": [],
-        "environment": ${environment},
+        "essential": true,
+        "environment": [],
         "mountPoints": [],
-        "firelensConfiguration": {
-            "type": "fluentbit"
-        },
+        "volumesFrom": [],
+        "user": "0",
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
@@ -17,6 +17,10 @@
                "awslogs-region": "${awslogs_region}",
                "awslogs-stream-prefix": "firelens"
             }
+        },
+        "systemControls": [],
+        "firelensConfiguration": {
+            "type": "fluentbit"
         }
         ${additional_config}
     }
