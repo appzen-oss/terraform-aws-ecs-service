@@ -330,7 +330,7 @@ data "template_file" "firelens_container_definition" {
 # Look into support for sidecars, proxy, (AppMesh)
 
 locals {
-   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.telegraf_sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered},${data.template_file.cleanup_sidecar_container_definition.rendered}]"}"
+   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}]"}"
 }
 
 resource "aws_ecs_task_definition" "task" {
