@@ -236,6 +236,7 @@ data "template_file" "sidecar_container_definition" {
 }
 
 # telegraf sidecar container_definition
+/*
 data "template_file" "telegraf_sidecar_container_definition" {
   count    = "${module.enabled.value}"
   template = "${file("${path.module}/files/telegraf_sidecar_container_defination.json")}"
@@ -253,6 +254,7 @@ data "template_file" "telegraf_sidecar_container_definition" {
     ",${var.telegraf_sidecar_container_definition_additional}"}"
   }
 }
+*/
 
 # promtail sidecar container_definition
 data "template_file" "promtail_sidecar_container_definition" {
@@ -276,6 +278,7 @@ data "template_file" "promtail_sidecar_container_definition" {
 }
 
 # cleanup sidecar container_definition
+/*
 data "template_file" "cleanup_sidecar_container_definition" {
   count    = "${module.enabled.value}"
   template = "${file("${path.module}/files/promtail_sidecar_container_defination.json")}"
@@ -295,6 +298,7 @@ data "template_file" "cleanup_sidecar_container_definition" {
     ",${var.cleanup_sidecar_container_definition_additional}"}"
   }
 }
+*/
 
 # application_with_firelens_container_definition
 data "template_file" "firelens_container_definition" {
