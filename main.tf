@@ -320,6 +320,7 @@ data "template_file" "firelens_container_definition" {
     firelens_host         = "${var.firelens_host_url}"
     firelens_port         = "${var.firelens_port}"
     awslogs_region        = "${var.region}"
+    ecslog_bucket         = "${var.ecslog_bucket}"
     additional_config     = "${var.container_definition_additional == "" ? "" :
     ",${var.container_definition_additional}"}"
   }

@@ -10,7 +10,7 @@
         "logConfiguration": {
             "logDriver": "awsfirelens",
             "options": {
-                "bucket": "appzen-infra-us-s3-ecs-log",
+                "bucket": "${ecslogs_bucket}",
                 "total_file_size": "1M",
                 "use_put_object": "On",
                 "upload_timeout": "5m",
