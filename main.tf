@@ -224,7 +224,7 @@ data "template_file" "sidecar_container_definition" {
     image                 = "${var.sidecar_docker_image}"
     memory                = "${var.docker_memory}"
     memory_reservation    = "${var.sidecar_docker_memory_reservation}"
-    environment           = "${jsonencode(var.sidecar_docker_environment)}"
+    #environment           = "${jsonencode(var.sidecar_docker_environment)}"
     container_path        = "${var.container_path}"
     source_volume_name    = "${var.source_volume_name}"
     awslogs_group         = "${local.log_group_name}"
