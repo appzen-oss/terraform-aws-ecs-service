@@ -52,6 +52,26 @@ variable "ecslogs_bucket" {
   type        = "string"
   default     = ""
 }
+variable "total_file_size" {
+  type        = "string"
+  default     = ""
+}
+variable "use_put_object" {
+  type        = "string"
+  default     = ""
+}
+variable "upload_timeout" {
+  type        = "string"
+  default     = ""
+}
+variable "retry_limit" {
+  type        = "integer"
+  default     = ""
+}
+variable "awslogs-stream-prefix" {
+  type        = "string"
+  default     = ""
+}
 
 variable "vpc_id" {
   description = "ID of VPC in which ECS cluster is located"

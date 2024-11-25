@@ -3,7 +3,7 @@
         "image": "${image}",
         "memoryReservation": ${memory_reservation},
         "portMappings": [],
-        "essential": true,
+        "essential": "${essential_container}",
         "environment": [],
         "mountPoints": [],
         "volumesFrom": [],
@@ -14,7 +14,7 @@
                "awslogs-group": "${awslogs_group}",
                "awslogs-create-group": "true",
                "awslogs-region": "${awslogs_region}",
-               "awslogs-stream-prefix": "firelens"
+               "awslogs-stream-prefix": "${awslogs-stream-prefix}"
             }
         },
         "systemControls": [],

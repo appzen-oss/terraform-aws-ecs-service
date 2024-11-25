@@ -229,7 +229,8 @@ data "template_file" "sidecar_container_definition" {
     source_volume_name    = "${var.source_volume_name}"
     awslogs_group         = "${local.log_group_name}"
     awslogs_region        = "${var.region}"
-    awslogs_stream_prefix = "${module.label.environment}"
+    awslogs_stream_prefix = "${var.awslogs-stream-prefix}"
+    essential_container   = "${var.essential_container}"
     additional_config     = "${var.sidecar_container_definition_additional == "" ? "" :
     ",${var.sidecar_container_definition_additional}"}"
   }
@@ -320,7 +321,11 @@ data "template_file" "firelens_container_definition" {
     firelens_host         = "${var.firelens_host_url}"
     firelens_port         = "${var.firelens_port}"
     awslogs_region        = "${var.region}"
-    ecslogs_bucket         = "${var.ecslogs_bucket}"
+    ecslogs_bucket        = "${var.ecslogs_bucket}"
+    total_file_size       = "${var.total_file_size}"
+    use_put_object        = "${var.use_put_object}"
+    upload_timeout        = "${var.upload_timeout}"
+    retry_limit           = "${var.retry_limit}"
     additional_config     = "${var.container_definition_additional == "" ? "" :
     ",${var.container_definition_additional}"}"
   }
