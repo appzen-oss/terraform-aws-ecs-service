@@ -65,7 +65,7 @@ variable "upload_timeout" {
   default     = ""
 }
 variable "retry_limit" {
-  type        = "integer"
+  type        = "string"
   default     = ""
 }
 variable "awslogs-stream-prefix" {
