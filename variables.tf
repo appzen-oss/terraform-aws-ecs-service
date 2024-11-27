@@ -77,6 +77,10 @@ variable "essential_container" {
   default     = ""
 }
 
+variable "awslogs-stream-prefix" {
+  type        = "string"
+  default     = ""
+}
 variable "vpc_id" {
   description = "ID of VPC in which ECS cluster is located"
   type        = "string"
