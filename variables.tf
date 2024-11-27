@@ -70,7 +70,7 @@ variable "retry_limit" {
 }
 
 variable "essential_container" {
-  type        = "boolean"
+  type        = "string"
   default     = ""
 }
 
