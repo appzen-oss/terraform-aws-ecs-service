@@ -14,7 +14,7 @@
                "awslogs-group": "${awslogs_group}",
                "awslogs-create-group": "true",
                "awslogs-region": "${awslogs_region}",
-               "awslogs-stream-prefix": "${awslogs-stream-prefix}"
+               "awslogs-stream-prefix": "${awslogs_stream_prefix}"
             }
         },
         "systemControls": [],
