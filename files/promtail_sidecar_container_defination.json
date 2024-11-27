@@ -2,7 +2,7 @@
   "name": "${name}",
   "image": "${image}",
   "portMappings": [],
-  "essential": false,
+  "essential": "${essential_container}",
   "memory": ${memory},
   "memoryReservatin": ${memory_reservation},
   "memoryReservation": ${memory_reservation},
