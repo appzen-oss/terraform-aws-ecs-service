@@ -230,7 +230,7 @@ data "template_file" "sidecar_container_definition" {
     awslogs_group         = "${local.log_group_name}"
     awslogs_region        = "${var.region}"
     awslogs_stream_prefix = "${var.awslogs_stream_prefix}"
-    essential_container   = "${var.essential_container}"
+    essential_container   = "${local.essential_container_bool}"
     additional_config     = "${var.sidecar_container_definition_additional == "" ? "" :
     ",${var.sidecar_container_definition_additional}"}"
   }
@@ -337,6 +337,7 @@ data "template_file" "firelens_container_definition" {
 
 locals {
    container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}]"}"
+   essential_container_bool = bool(var.essential_container)
 }
 
 resource "aws_ecs_task_definition" "task" {
