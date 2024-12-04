@@ -71,7 +71,7 @@ variable "retry_limit" {
 
 variable "awslogs_stream_prefix" {
   type        = "string"
-  default     = ""
+  default     = "firelens"
 }
 variable "vpc_id" {
   description = "ID of VPC in which ECS cluster is located"
