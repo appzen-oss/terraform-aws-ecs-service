@@ -54,7 +54,7 @@ variable "ecslogs_bucket" {
 }
 variable "total_file_size" {
   type        = "string"
-  default     = ""
+  default     = "1M"
 }
 variable "use_put_object" {
   type        = "string"
