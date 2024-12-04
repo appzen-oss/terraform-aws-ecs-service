@@ -3,7 +3,6 @@
         "image": "${image}",
         "memoryReservation": ${memory_reservation},
         "portMappings": [],
-        "essential": "${essential_container}",
         "environment": [],
         "mountPoints": [],
         "volumesFrom": [],

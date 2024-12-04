@@ -230,7 +230,6 @@ data "template_file" "sidecar_container_definition" {
     awslogs_group         = "${local.log_group_name}"
     awslogs_region        = "${var.region}"
     awslogs_stream_prefix = "${var.awslogs_stream_prefix}"
-    essential_container   = "${var.essential_container}"
     additional_config     = "${var.sidecar_container_definition_additional == "" ? "" :
     ",${var.sidecar_container_definition_additional}"}"
   }

@@ -69,11 +69,6 @@ variable "retry_limit" {
   default     = ""
 }
 
-variable "essential_container" {
-  type        = "bool"
-  default     = ""
-}
-
 variable "awslogs_stream_prefix" {
   type        = "string"
   default     = ""
