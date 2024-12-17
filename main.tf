@@ -221,21 +221,22 @@ data "template_file" "sidecar_container_definition" {
 
   vars {
     name                  = "log_router"
-    image                 = "${var.docker_registry != "" ? "${var.docker_registry}/${var.sidecar_docker_image}" : var.sidecar_docker_image}"
+    image                 = "${var.sidecar_docker_image}"
     memory                = "${var.docker_memory}"
     memory_reservation    = "${var.sidecar_docker_memory_reservation}"
-    environment           = "${jsonencode(var.sidecar_docker_environment)}"
+    #environment           = "${jsonencode(var.sidecar_docker_environment)}"
     container_path        = "${var.container_path}"
     source_volume_name    = "${var.source_volume_name}"
     awslogs_group         = "${local.log_group_name}"
     awslogs_region        = "${var.region}"
-    awslogs_stream_prefix = "${module.label.environment}"
+    awslogs_stream_prefix = "${var.awslogs_stream_prefix}"
     additional_config     = "${var.sidecar_container_definition_additional == "" ? "" :
     ",${var.sidecar_container_definition_additional}"}"
   }
 }
 
 # telegraf sidecar container_definition
+/*
 data "template_file" "telegraf_sidecar_container_definition" {
   count    = "${module.enabled.value}"
   template = "${file("${path.module}/files/telegraf_sidecar_container_defination.json")}"
@@ -253,6 +254,7 @@ data "template_file" "telegraf_sidecar_container_definition" {
     ",${var.telegraf_sidecar_container_definition_additional}"}"
   }
 }
+*/
 
 # promtail sidecar container_definition
 data "template_file" "promtail_sidecar_container_definition" {
@@ -276,6 +278,7 @@ data "template_file" "promtail_sidecar_container_definition" {
 }
 
 # cleanup sidecar container_definition
+/*
 data "template_file" "cleanup_sidecar_container_definition" {
   count    = "${module.enabled.value}"
   template = "${file("${path.module}/files/promtail_sidecar_container_defination.json")}"
@@ -295,6 +298,7 @@ data "template_file" "cleanup_sidecar_container_definition" {
     ",${var.cleanup_sidecar_container_definition_additional}"}"
   }
 }
+*/
 
 # application_with_firelens_container_definition
 data "template_file" "firelens_container_definition" {
@@ -315,6 +319,12 @@ data "template_file" "firelens_container_definition" {
     mount_points          = "${replace(jsonencode(var.docker_mount_points), "\"true\"", true)}"
     firelens_host         = "${var.firelens_host_url}"
     firelens_port         = "${var.firelens_port}"
+    awslogs_region        = "${var.region}"
+    ecslogs_bucket        = "${var.ecslogs_bucket}"
+    total_file_size       = "${var.total_file_size}"
+    use_put_object        = "${var.use_put_object}"
+    upload_timeout        = "${var.upload_timeout}"
+    retry_limit           = "${var.retry_limit}"
     additional_config     = "${var.container_definition_additional == "" ? "" :
     ",${var.container_definition_additional}"}"
   }
@@ -325,7 +335,7 @@ data "template_file" "firelens_container_definition" {
 # Look into support for sidecars, proxy, (AppMesh)
 
 locals {
-   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.telegraf_sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered},${data.template_file.cleanup_sidecar_container_definition.rendered}]"}"
+   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}]"}"
 }
 
 resource "aws_ecs_task_definition" "task" {

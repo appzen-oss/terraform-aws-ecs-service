@@ -10,9 +10,13 @@
         "logConfiguration": {
             "logDriver": "awsfirelens",
             "options": {
-               "Name": "forward",
-               "Host": "${firelens_host}",
-               "Port": "${firelens_port}"
+                "bucket": "${ecslogs_bucket}",
+                "total_file_size": "${total_file_size}",
+                "use_put_object": "${use_put_object}",
+                "upload_timeout": "${upload_timeout}",
+                "region": "${awslogs_region}",
+                "Name": "s3",
+                "retry_limit": "${retry_limit}"
             }
         }
         ${additional_config}

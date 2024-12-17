@@ -47,6 +47,32 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "ecslogs_bucket" {
+  description = "s3 bucket to store ecs service logs"
+  type        = "string"
+  default     = ""
+}
+variable "total_file_size" {
+  type        = "string"
+  default     = "1M"
+}
+variable "use_put_object" {
+  type        = "string"
+  default     = ""
+}
+variable "upload_timeout" {
+  type        = "string"
+  default     = ""
+}
+variable "retry_limit" {
+  type        = "string"
+  default     = ""
+}
+
+variable "awslogs_stream_prefix" {
+  type        = "string"
+  default     = "firelens"
+}
 variable "vpc_id" {
   description = "ID of VPC in which ECS cluster is located"
   type        = "string"
