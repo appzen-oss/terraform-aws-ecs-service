@@ -277,6 +277,21 @@ data "template_file" "promtail_sidecar_container_definition" {
   }
 }
 
+# datadog-agent sidecar container_definition
+data "template_file" "datadog_agent_sidecar_container_definition" {
+  count    = "${module.enabled.value}"
+  template = "${file("${path.module}/files/datadog_agent_sidecar_container_definition.json")}"
+
+  vars {
+    name               = "datadog-agent"
+    image              = "${var.datadog_agent_sidecar_docker_image}"
+    memory_reservation = "${var.datadog_agent_sidecar_docker_memory_reservation}"
+    environment        = "${jsonencode(var.datadog_agent_sidecar_docker_environment)}"
+    additional_config  = "${var.datadog_agent_sidecar_container_definition_additional == "" ? "" :
+    ",${var.datadog_agent_sidecar_container_definition_additional}"}"
+  }
+}
+
 # cleanup sidecar container_definition
 /*
 data "template_file" "cleanup_sidecar_container_definition" {
@@ -335,7 +350,8 @@ data "template_file" "firelens_container_definition" {
 # Look into support for sidecars, proxy, (AppMesh)
 
 locals {
-   container_definitions = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}]"}"
+  datadog_agent_sidecar_rendered = "${var.datadog_agent_sidecar_docker_image != "" ? ",${data.template_file.datadog_agent_sidecar_container_definition.rendered}" : ""}"
+  container_definitions          = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}${local.datadog_agent_sidecar_rendered}]"}"
 }
 
 resource "aws_ecs_task_definition" "task" {

@@ -451,6 +451,28 @@ variable "cleanup_sidecar_docker_memory_reservation" {
   default     = 128
 }
 
+variable "datadog_agent_sidecar_docker_image" {
+  description = "Datadog agent Docker image for APM sidecar. Set to non-empty value to enable (e.g. public.ecr.aws/datadog/agent:latest)"
+  type        = "string"
+  default     = ""
+}
+
+variable "datadog_agent_sidecar_docker_environment" {
+  description = "List of environment maps for the Datadog agent sidecar of format { \"name\" = \"var_name\", \"value\" = \"var_value\" }"
+  type        = "list"
+  default     = []
+}
+
+variable "datadog_agent_sidecar_docker_memory_reservation" {
+  description = "Soft limit on memory for the Datadog agent sidecar container (default 256)"
+  default     = 256
+}
+
+variable "datadog_agent_sidecar_container_definition_additional" {
+  description = "Additional JSON fragment appended to the Datadog agent container definition (used for secrets such as DD_API_KEY)"
+  default     = ""
+}
+
 variable "component" {
   description = "label component name"
   default     = ""
