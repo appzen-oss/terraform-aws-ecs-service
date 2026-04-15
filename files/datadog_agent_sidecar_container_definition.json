@@ -1,0 +1,13 @@
+{
+  "name": "${name}",
+  "image": "${image}",
+  "cpu": 0,
+  "portMappings": [],
+  "essential": false,
+  "memoryReservation": ${memory_reservation},
+  "environment": ${environment},
+  "mountPoints": [],
+  "volumesFrom": [],
+  "systemControls": []
+  ${additional_config}
+}
