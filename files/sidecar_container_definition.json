@@ -18,7 +18,10 @@
         },
         "systemControls": [],
         "firelensConfiguration": {
-            "type": "fluentbit"
+            "type": "fluentbit",
+            "options": {
+                "enable-ecs-log-metadata": "true"
+            }
         }
         ${additional_config}
     }

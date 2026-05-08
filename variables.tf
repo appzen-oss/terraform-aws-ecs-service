@@ -487,3 +487,39 @@ variable "team" {
   description = "label team name"
   default     = ""
 }
+
+variable "firelens_destination" {
+  description = "Destination for awsfirelens app logs. Either 's3' (default) or 'datadog'."
+  type        = "string"
+  default     = "s3"
+}
+
+variable "dd_service" {
+  description = "Datadog service tag for app firelens logs. Defaults to module label name when empty."
+  type        = "string"
+  default     = ""
+}
+
+variable "dd_source" {
+  description = "Datadog dd_source tag for app firelens logs (e.g. java, python)."
+  type        = "string"
+  default     = "java"
+}
+
+variable "dd_tags" {
+  description = "Datadog dd_tags string for app firelens logs. Defaults to env:<environment>,ecs:true when empty."
+  type        = "string"
+  default     = ""
+}
+
+variable "datadog_logs_host" {
+  description = "Datadog logs intake host."
+  type        = "string"
+  default     = "http-intake.logs.datadoghq.com"
+}
+
+variable "datadog_api_key_arn" {
+  description = "SSM parameter ARN for the Datadog API key. Required when firelens_destination = 'datadog'."
+  type        = "string"
+  default     = ""
+}

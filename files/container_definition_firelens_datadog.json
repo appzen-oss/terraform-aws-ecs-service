@@ -1,0 +1,29 @@
+    {
+        "name": "${name}",
+        "image": "${image}",
+        "memory": ${memory},
+        "memoryReservation": ${memory_reservation},
+        "portMappings": ${port_mappings},
+        ${command_override}
+        "environment": ${environment},
+        "mountPoints": ${mount_points},
+        "logConfiguration": {
+            "logDriver": "awsfirelens",
+            "options": {
+                "provider": "ecs",
+                "dd_service": "${dd_service}",
+                "Host": "${datadog_logs_host}",
+                "TLS": "on",
+                "dd_source": "${dd_source}",
+                "dd_tags": "${dd_tags}",
+                "Name": "datadog"
+            },
+            "secretOptions": [
+                {
+                    "name": "apikey",
+                    "valueFrom": "${datadog_api_key_arn}"
+                }
+            ]
+        }
+        ${additional_config}
+    }

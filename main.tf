@@ -315,7 +315,7 @@ data "template_file" "cleanup_sidecar_container_definition" {
 }
 */
 
-# application_with_firelens_container_definition
+# application_with_firelens_container_definition (S3 destination)
 data "template_file" "firelens_container_definition" {
   count    = "${module.enabled.value}"
   template = "${file("${path.module}/files/container_definition_firelens.json")}"
@@ -345,13 +345,39 @@ data "template_file" "firelens_container_definition" {
   }
 }
 
+# application_with_firelens_container_definition (Datadog destination)
+data "template_file" "firelens_datadog_container_definition" {
+  count    = "${module.enabled.value}"
+  template = "${file("${path.module}/files/container_definition_firelens_datadog.json")}"
+
+  vars {
+    name               = "${module.label.name}"
+    image              = "${var.docker_registry != "" ? "${var.docker_registry}/${var.docker_image}" : var.docker_image}"
+    memory             = "${var.docker_memory}"
+    memory_reservation = "${var.docker_memory_reservation}"
+
+    port_mappings       = "${replace(jsonencode(var.docker_port_mappings), "/\"([0-9]+)\"/", "$1")}"
+    command_override    = "${length(var.docker_command) > 0 ? "\"command\": [\"${var.docker_command}\"]," : ""}"
+    environment         = "${jsonencode(var.docker_environment)}"
+    mount_points        = "${replace(jsonencode(var.docker_mount_points), "\"true\"", true)}"
+    dd_service          = "${var.dd_service != "" ? var.dd_service : module.label.name}"
+    dd_source           = "${var.dd_source}"
+    dd_tags             = "${var.dd_tags != "" ? var.dd_tags : "env:${module.label.environment},ecs:true"}"
+    datadog_logs_host   = "${var.datadog_logs_host}"
+    datadog_api_key_arn = "${var.datadog_api_key_arn}"
+    additional_config   = "${var.container_definition_additional == "" ? "" :
+    ",${var.container_definition_additional}"}"
+  }
+}
+
 # FIX: resource cannot be found if it fails
 #   when passing in container_definition, if def bad, wrong format, invalid arg, etc.
 # Look into support for sidecars, proxy, (AppMesh)
 
 locals {
   datadog_agent_sidecar_rendered = "${var.datadog_agent_sidecar_docker_image != "" ? ",${data.template_file.datadog_agent_sidecar_container_definition.rendered}" : ""}"
-  container_definitions          = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${data.template_file.firelens_container_definition.rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}${local.datadog_agent_sidecar_rendered}]"}"
+  firelens_app_rendered          = "${var.firelens_destination == "datadog" ? data.template_file.firelens_datadog_container_definition.rendered : data.template_file.firelens_container_definition.rendered}"
+  container_definitions          = "${var.container_definition == "" && var.firelens_host_url == "" ? element(concat(data.template_file.container_definition.*.rendered, list("")), 0) : "[${local.firelens_app_rendered},${data.template_file.sidecar_container_definition.rendered},${data.template_file.promtail_sidecar_container_definition.rendered}${local.datadog_agent_sidecar_rendered}]"}"
 }
 
 resource "aws_ecs_task_definition" "task" {
